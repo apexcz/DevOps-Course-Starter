@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, Response
+from flask import Flask, request, render_template, redirect, url_for
 import json
 from todo_app.flask_config import Config
 from todo_app.data import session_items as session
