@@ -10,10 +10,10 @@
   <div class="row mb-4">
     <div class="col-md-12">
       <h2>Add Item</h2>
-      <form action="{{ url_for('index') }}" method="post">
+      <form action="{{ url_for('save_item') }}" method="post">
           <div class="form-row">
             <div class="form-group col-md-8">
-              <input type="text" class="form-control" name="title" placeholder="Enter a task here" required>
+              <input type="text" class="form-control" name="title" placeholder="Enter a task here">
             </div>
             <div class="form-group col-md-3">
               <button type="submit" class="btn btn-success btn-block">Submit</button>
@@ -21,9 +21,13 @@
           </div>
       </form>
     
-      {% if error %}
-        <p class="text-danger">{{ error }}</p>
-      {% endif %}
+      {% with error_messages = get_flashed_messages() %}
+        {% if error_messages %}
+          {% for error_message in error_messages %}
+            <p class="text-danger">{{ error_message }}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
     </div>
   </div>
 
@@ -40,10 +44,9 @@
           </tr>
         </thead>
         <tbody>
-          {% for index in range(0, todos|length) %}
-              {% set todo = todos[index] %}
+          {% for todo in todos %}
               <tr>
-                <td>{{index + 1}}</td>
+                <td>{{loop.index}}</td>
                 <td>{{todo.title}}</td>
                 <td>{{todo.status}}</td>
 
@@ -51,13 +54,13 @@
 
                   {% if todo.status != 'Completed' %}
                     <form action="{{ url_for('mark_completed') }}" method="post">
-                      <input type="hidden" name="todo_item" value='{{ todo|tojson }}'>
+                      <input type="hidden" name="todo_id" value='{{ todo.id }}'>
                       <button type="submit" class="btn btn-outline-success mr-2">Done</button>
                     </form>
                   {% endif %}
 
                   <form action="{{ url_for('delete_item') }}" method="post">
-                    <input type="hidden" name="todo_item" value='{{ todo|tojson }}'>
+                    <input type="hidden" name="todo_id" value='{{ todo.id }}'>
                     <button type="submit" class="btn btn-outline-danger ml-1"  onclick="return confirm('Are you sure?')">Delete</i></button>
                   </form>
 
