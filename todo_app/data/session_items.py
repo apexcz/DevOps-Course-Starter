@@ -67,3 +67,17 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
+
+def remove_item(item):
+    """
+    Deletes an existing item in the session. If item does not exists in the session, nothing is deleted.
+
+    Args:
+        item: The item to delete.
+    """
+    item_list = get_items()
+    try:
+        item_list.remove(item)
+        session['items'] = item_list
+    except ValueError:
+        print('Log error = Item does not exist in the session')
