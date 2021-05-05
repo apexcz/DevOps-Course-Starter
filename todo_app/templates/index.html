@@ -2,62 +2,84 @@
 {% block title %}To-Do App{% endblock %}
 
 {% block content %}
-  <div class="jumbotron">
-    <h1 class="display-4">To-Do App</h1>
-    <p class="lead">Just another to-do app.</p>
-  </div>
-
   <div class="row mb-4">
     <div class="col-md-12">
-      <h2>Add Item</h2>
-      <form action="{{ url_for('index') }}" method="post">
+      <h2>Add Task</h2>
+      <form action="{{ url_for('save_item') }}" method="post">
           <div class="form-row">
             <div class="form-group col-md-8">
-              <input type="text" class="form-control" name="title" placeholder="Enter a task here" required>
+              <label for="title">Task Title</label>
+              <input type="text" class="form-control" id="title" name="title" placeholder="Enter a task here" maxlength="100" required>
             </div>
             <div class="form-group col-md-3">
-              <button type="submit" class="btn btn-success btn-block">Submit</button>
+              <label for="due-date">Task Due Date (Optional)</label>
+              <input type="date" class="form-control" id="due-date" name="due-date">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label for="description">Task Description (Optional)</label>
+              <textarea type="text" class="form-control" id="description" name="description" rows="3" maxlength="100"></textarea>
+            </div>
+            <div class="form-group col-md-3 mt-5">
+              <button type="submit" class="btn btn-success btn-block">Save</button>
             </div>
           </div>
       </form>
     
-      {% if error %}
-        <p class="text-danger">{{ error }}</p>
-      {% endif %}
+      {% with error_messages = get_flashed_messages() %}
+        {% if error_messages %}
+          {% for error_message in error_messages %}
+            <p class="text-danger">{{ error_message }}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
+      <h2>Tasks</h2>
       <table class="table table-bordered mb-4">
         <thead class="thead-dark">
           <tr>
             <th>#</th>
             <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {% for index in range(0, todos|length) %}
-              {% set todo = todos[index] %}
+          {% for todo in todos %}
               <tr>
-                <td>{{index + 1}}</td>
+                <td>{{loop.index}}</td>
                 <td>{{todo.title}}</td>
+                <td>{{todo.description}}</td>
+                {% if todo.due_date == None %}
+                  <td></td>
+                {% else %}
+                  <td>{{todo.due_date}}</td>
+                {% endif %}
                 <td>{{todo.status}}</td>
 
                 <td class="d-flex justify-content-center">
 
-                  {% if todo.status != 'Completed' %}
-                    <form action="{{ url_for('mark_completed') }}" method="post">
-                      <input type="hidden" name="todo_item" value='{{ todo|tojson }}'>
+                  {% if todo.status == 'Completed' %}
+                    <form action="{{ url_for('repeat_item') }}" method="post">
+                      <input type="hidden" name="todo_id" value='{{ todo.id }}'>
+                      <button type="submit" class="btn btn-outline-info mr-2">Repeat</button>
+                    </form>
+                  {% else %}
+                    <form action="{{ url_for('complete_item') }}" method="post">
+                      <input type="hidden" name="todo_id" value='{{ todo.id }}'>
                       <button type="submit" class="btn btn-outline-success mr-2">Done</button>
                     </form>
                   {% endif %}
 
                   <form action="{{ url_for('delete_item') }}" method="post">
-                    <input type="hidden" name="todo_item" value='{{ todo|tojson }}'>
+                    <input type="hidden" name="todo_id" value='{{ todo.id }}'>
                     <button type="submit" class="btn btn-outline-danger ml-1"  onclick="return confirm('Are you sure?')">Delete</i></button>
                   </form>
 

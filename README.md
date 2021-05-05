@@ -30,7 +30,13 @@ You'll also need to clone a new `.env` file from the `.env.template` to store lo
 $ cp .env.template .env  # (first time only)
 ```
 
-The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like development mode (which also enables features like hot reloading when you make a file change). There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
+The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like development mode (which also enables features like hot reloading when you make a file change). There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie. 
+
+You also need to create a Trello [account](https://trello.com/signup) and get an [API_KEY and TOKEN](https://trello.com/app-key).Add your Trello key and token in the `.env` file as shown in the `.env.template`
+* TRELLO_API_KEY 
+* TRELLO_TOKEN
+
+The ToDo App uses the Trello credentials provided to create a Board on Trello called "Tasky_1_2_3_". This is the board used to save the lists of tasks.
 
 ## Running the App
 
