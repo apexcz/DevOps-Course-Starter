@@ -56,3 +56,12 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+## Running the tests
+
+To run the unit and integration tests, use the command ``poetry run pytest tests``. This will run any test defined in a function
+matching the pattern ``test_*`` or ``*_test``, in any file matching the same patterns, in the ``tests`` directory.
+
+To run the selenium, first change the CHROME_DRIVER_PATH in the ``test_browser.py`` file in the tests_e2e directory to your own selenium chromedriver path. Please ensure to add the chromedriver on your $PATH. Then run, ``poetry run pytest tests_e2e``.
+
+Note that the selenium tests creates a ``DummyBoard`` on Trello which gets deleted after test completion.
