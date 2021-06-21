@@ -6,7 +6,7 @@
   <div class="col-md-12">
     <h2>Add Task</h2>
     <form action="{{ url_for('save_item') }}" method="post">
-      <div class="form-row">
+      <div id="add-task" class="form-row">
         <div class="form-group col-md-8">
           <label for="title">Task Title</label>
           <input type="text" class="form-control" id="title" name="title" placeholder="Enter a task here"
@@ -24,7 +24,7 @@
             maxlength="100"></textarea>
         </div>
         <div class="form-group col-md-3 mt-5">
-          <button type="submit" class="btn btn-success btn-block">Save</button>
+          <button type="submit" id="save" class="btn btn-success btn-block">Save</button>
         </div>
       </div>
     </form>
@@ -32,7 +32,7 @@
     {% with error_messages = get_flashed_messages() %}
     {% if error_messages %}
     {% for error_message in error_messages %}
-    <p class="text-danger">{{ error_message }}</p>
+    <p class="text-danger error-message">{{ error_message }}</p>
     {% endfor %}
     {% endif %}
     {% endwith %}
@@ -41,21 +41,20 @@
 
 <div class="row">
   <div class="col-md-12">
-    <h2>Tasks</h2>
-    <table class="table table-bordered mb-4">
+    <h2>Tasks Not Started</h2>
+    <table id="not-started" class="table table-bordered mb-4">
       <thead class="thead-dark">
         <tr>
           <th>#</th>
           <th>Title</th>
           <th>Description</th>
           <th>Due Date</th>
-          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {% for todo in todos %}
-        <tr>
+        {% for todo in view_model.to_do_items %}
+        <tr id='not-started-{{loop.index}}'>
           <td>{{loop.index}}</td>
           <td>{{todo.title}}</td>
           <td>{{todo.description}}</td>
@@ -64,28 +63,98 @@
           {% else %}
           <td>{{todo.due_date}}</td>
           {% endif %}
-          <td>{{todo.status}}</td>
-
           <td class="d-flex justify-content-center">
-
-            {% if todo.status == 'Completed' %}
-            <form action="{{ url_for('repeat_item') }}" method="post">
+            <form action="{{ url_for('move_to_doing') }}" method="post">
               <input type="hidden" name="todo_id" value='{{ todo.id }}'>
-              <button type="submit" class="btn btn-outline-info mr-2">Repeat</button>
+              <button type="submit" id='start-{{loop.index}}' class="btn btn-outline-info mr-2">Start</button>
             </form>
-            {% else %}
-            <form action="{{ url_for('complete_item') }}" method="post">
-              <input type="hidden" name="todo_id" value='{{ todo.id }}'>
-              <button type="submit" class="btn btn-outline-success mr-2">Done</button>
-            </form>
-            {% endif %}
 
             <form action="{{ url_for('delete_item') }}" method="post">
               <input type="hidden" name="todo_id" value='{{ todo.id }}'>
-              <button type="submit" class="btn btn-outline-danger ml-1"
+              <button type="submit" id='delete-todo-{{loop.index}}' class="btn btn-outline-danger ml-1"
                 onclick="return confirm('Are you sure?')">Delete</i></button>
             </form>
 
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2>Tasks In Progress</h2>
+    <table id="in-progress" class="table table-bordered mb-4">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for todo in view_model.doing_items %}
+        <tr id='in-progress-{{loop.index}}'>
+          <td>{{loop.index}}</td>
+          <td>{{todo.title}}</td>
+          <td>{{todo.description}}</td>
+          {% if todo.due_date == None %}
+          <td></td>
+          {% else %}
+          <td>{{todo.due_date}}</td>
+          {% endif %}
+          <td class="d-flex justify-content-center">
+            <form action="{{ url_for('move_to_done') }}" method="post">
+              <input type="hidden" name="todo_id" value='{{ todo.id }}'>
+              <button type="submit" id='done-{{loop.index}}' class="btn btn-outline-success mr-2">Done</button>
+            </form>
+
+            <form action="{{ url_for('delete_item') }}" method="post">
+              <input type="hidden" name="todo_id" value='{{ todo.id }}'>
+              <button type="submit" id='delete-doing-{{loop.index}}' class="btn btn-outline-danger ml-1"
+                onclick="return confirm('Are you sure?')">Delete</i></button>
+            </form>
+
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2>Tasks Completed</h2>
+    <table id="completed" class="table table-bordered mb-4">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for todo in view_model.done_items %}
+        <tr id='completed-{{loop.index}}'>
+          <td>{{loop.index}}</td>
+          <td>{{todo.title}}</td>
+          <td>{{todo.description}}</td>
+          <td class="d-flex justify-content-center">
+            <form action="{{ url_for('move_to_todo') }}" method="post">
+              <input type="hidden" name="todo_id" value='{{ todo.id }}'>
+              <button type="submit" id='repeat-{{loop.index}}' class="btn btn-outline-info mr-2">Repeat</button>
+            </form>
+            <form action="{{ url_for('delete_item') }}" method="post">
+              <input type="hidden" name="todo_id" value='{{ todo.id }}'>
+              <button type="submit" id='delete-done-{{loop.index}}' class="btn btn-outline-danger ml-1"
+                onclick="return confirm('Are you sure?')">Delete</i></button>
+            </form>
           </td>
         </tr>
         {% endfor %}
