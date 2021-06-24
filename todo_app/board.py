@@ -76,6 +76,16 @@ class Board:
             f'{TRELLO_BASE_URL}/boards/{board_id}', params=query)
         return response
 
+    @staticmethod
+    def archive_cards(trello_api_key, trello_token, list_id):
+        query = {
+            'key': trello_api_key,
+            'token': trello_token
+        }
+        response = requests.post(
+            f'{TRELLO_BASE_URL}/lists/{list_id}/archiveAllCards', params=query)
+        return response
+
     def get_config(self):
         return self.config
 

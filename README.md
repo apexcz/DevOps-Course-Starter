@@ -36,7 +36,7 @@ You also need to create a Trello [account](https://trello.com/signup) and get an
 * TRELLO_API_KEY 
 * TRELLO_TOKEN
 
-The ToDo App uses the Trello credentials provided to create a Board on Trello called "Tasky_1_2_3_". This is the board used to save the lists of tasks.
+The ToDo App uses the Trello credentials provided to create a Board on Trello called "Tasky_1_2_3_". This is the board used to save the lists of tasks. Please ensure that you have not exhausted your limits of creating new boards.
 
 ## Running the App
 
@@ -62,6 +62,6 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 To run the unit and integration tests, use the command ``poetry run pytest tests``. This will run any test defined in a function
 matching the pattern ``test_*`` or ``*_test``, in any file matching the same patterns, in the ``tests`` directory.
 
-To run the selenium, first change the CHROME_DRIVER_PATH in the ``test_browser.py`` file in the tests_e2e directory to your own selenium chromedriver path. Please ensure to add the chromedriver on your $PATH. Then run, ``poetry run pytest tests_e2e``.
+To run the selenium, please ensure to add the selenium chromedriver on your $PATH. Then run, ``poetry run pytest tests_e2e``. Remember, that you must have Chrome web browser installed.
 
 Note that the selenium tests creates a ``DummyBoard`` on Trello which gets deleted after test completion.

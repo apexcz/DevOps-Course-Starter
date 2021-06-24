@@ -54,12 +54,12 @@ def mock_trello_put_calls(url, params):
 def test_get_all_cards_on_board(service):
     result = service.get_all_items()
     assert len(result) == 3
-    assert result[0].title == 'Watch TV'
-    assert result[0].status == 'Todo'
+    assert result[0].title == 'Make breakfast'
+    assert result[0].status == 'Done'
     assert result[1].title == 'Wash the dishes'
     assert result[1].status == 'Doing'
-    assert result[2].title == 'Make breakfast'
-    assert result[2].status == 'Done'
+    assert result[2].title == 'Watch TV'
+    assert result[2].status == 'Todo'
     pass
 
 
