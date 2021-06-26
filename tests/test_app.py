@@ -58,7 +58,6 @@ def test_index_page(client):
     assert b'Watch TV' in response.data
     assert b'Wash the dishes' in response.data
     assert b'Make breakfast' in response.data
-    pass
 
 
 @patch('requests.post')
@@ -69,7 +68,6 @@ def test_create_item(mock_post_requests, client):
     }
     response = client.post('/', data=body)
     assert response.status_code == 302
-    pass
 
 
 @patch('requests.put')
@@ -80,7 +78,6 @@ def test_move_item_to_doing(mock_put_requests, client):
     }
     response = client.post('/move-to-doing', data=body)
     assert response.status_code == 302
-    pass
 
 
 @patch('requests.put')
@@ -91,7 +88,6 @@ def test_move_item_to_done(mock_put_requests, client):
     }
     response = client.post('/move-to-done', data=body)
     assert response.status_code == 302
-    pass
 
 
 @patch('requests.put')
@@ -102,7 +98,6 @@ def test_move_item_to_todo(mock_put_requests, client):
     }
     response = client.post('/move-to-todo', data=body)
     assert response.status_code == 302
-    pass
 
 
 @patch('requests.put')
@@ -113,4 +108,3 @@ def test_delete_item(mock_put_requests, client):
     }
     response = client.post('/delete-item', data=body)
     assert response.status_code == 302
-    pass
