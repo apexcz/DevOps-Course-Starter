@@ -1,0 +1,11 @@
+.git
+.github
+.idea
+.pytest_cache
+.vagrant
+.vscode
+.env
+.env.template
+.DS_Store
+Vagrantfile
+poetry.lock
