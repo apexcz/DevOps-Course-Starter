@@ -65,3 +65,43 @@ matching the pattern ``test_*`` or ``*_test``, in any file matching the same pat
 To run the selenium, please ensure to add the selenium chromedriver on your $PATH. Then run, ``poetry run pytest tests_e2e``. Remember, that you must have Chrome web browser installed.
 
 Note that the selenium tests creates a ``DummyBoard`` on Trello which gets deleted after test completion.
+
+## Running on Docker
+
+There are two environments that can be run on docker: development and production. The simplest way to launch the app is by running:
+```bash
+# To run both development and production
+docker-compose up 
+
+# To run only development
+docker-compose up todo-development
+
+# To run only production
+docker-compose up todo-production
+```
+
+Alternatively, you may run the app this way:
+### Follow the following steps to run the app in ``development``.
+
+1. cd to the base directory containing the Dockerfile
+2. Build an image from the ``development`` stage
+```bash
+docker build --target development --tag todo-app:dev .
+```
+3. Create a container from the image created above.
+```bash
+docker run --env-file .env -p 5001:5000 --mount type=bind,source="$(pwd)",target=/app/ todo-app:dev
+```
+**Note:** You have to specify the location of your .env file.
+
+### Follow the following steps to run the app in ``production``.
+
+1. cd to the base directory containing the Dockerfile
+2. Build an image from the ``production`` stage
+```bash
+docker build --target production --tag todo-app:prod .
+```
+3. Launch a container from the image created above.
+```bash
+docker run --env-file .env -p 5000:5000 todo-app:prod
+```

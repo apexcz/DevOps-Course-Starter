@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+    todo-development:
+        build:
+            context: .
+            target: development
+        env_file: .env
+        volumes: 
+            - ./:/app/
+        ports: 
+            - "5001:5000"
+    todo-production:
+        build:
+            context: .
+            target: production
+        env_file: .env
+        ports: 
+            - "5000:5000"
